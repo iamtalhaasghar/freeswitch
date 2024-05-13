@@ -85,7 +85,7 @@ SWITCH_MODULE_DEFINITION(mod_say_dr, mod_say_dr_load, NULL, NULL);
 static switch_status_t play_group(switch_say_method_t method, switch_say_gender_t gender, int a, int b, int c, char *what, switch_core_session_t *session, switch_input_args_t *args, int complete)
 {
 	int say_o = 0;
-	switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "saying %d %d %d %d", a, b, c, complete);
+	switch_log_printf(SWITCH_CHANNEL_LOG, SWITCH_LOG_DEBUG, "saying %d %d %d %d\n", a, b, c, complete);
 
 	if (a) {
 		/*german nominativ for "one" in numbers like 21, 171, 4591 is flexed("ein" instead of "eins"), 2-9 are not*/
