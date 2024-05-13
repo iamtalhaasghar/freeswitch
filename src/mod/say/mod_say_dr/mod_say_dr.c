@@ -269,7 +269,7 @@ static switch_status_t dr_say_time(switch_core_session_t *session, char *tosay, 
 	int32_t t;
 	switch_time_t target = 0, target_now = 0;
 	switch_time_exp_t tm, tm_now;
-	uint8_t say_date = 0, say_time = 0, say_year = 0, say_month = 0, say_dow = 0, say_day = 0, say_yesterday = 0, say_today = 0;
+	uint8_t say_date = 0, say_time = 0, say_year = 0, say_month = 0, say_dow = 0, say_day = 0, say_yesterday = 0, say_today = 0, no_year = 0;
 	switch_channel_t *channel = switch_core_session_get_channel(session);
 	const char *tz = switch_channel_get_variable(channel, "timezone");
 
@@ -380,6 +380,9 @@ static switch_status_t dr_say_time(switch_core_session_t *session, char *tosay, 
 	}
 
 	switch (say_args->type) {
+	case SST_CURRENT_DATE_TIME_NO_YEAR:
+		say_date = say_time = no_year = 1;
+		break;
 	case SST_CURRENT_DATE_TIME:
 		say_date = say_time = 1;
 		break;
@@ -429,7 +432,8 @@ static switch_status_t dr_say_time(switch_core_session_t *session, char *tosay, 
 	}
 
 	if (say_date) {
-		say_dow = say_day = say_month = say_year = 1;
+		say_year = !no_year;
+        say_dow = say_day = say_month = 1;
 		say_today = say_yesterday = 0;
 	}
 
@@ -566,6 +570,7 @@ static switch_status_t dr_say(switch_core_session_t *session, char *tosay, switc
 	case SST_CURRENT_DATE:
 	case SST_CURRENT_TIME:
 	case SST_CURRENT_DATE_TIME:
+	case SST_CURRENT_DATE_TIME_NO_YEAR:
 	case SST_SHORT_DATE_TIME:
 		say_cb = dr_say_time;
 		break;
