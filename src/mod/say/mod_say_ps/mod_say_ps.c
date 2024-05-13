@@ -430,10 +430,37 @@ static switch_status_t ps_say_time(switch_core_session_t *session, char *tosay, 
     }
 
 	if (say_time) {
+            int32_t hour = tm.tm_hour;
+            switch_bool_t pm = 0;
             if (say_date || say_today || say_yesterday || say_dow) {
                 say_file("time/at.wav");
             }
 
+            if (hour >= 12) {
+                pm = 1;
+            }
+
+            if (hour > 12) {
+                hour -= 12;
+            } else if (hour == 0) {
+                hour = 12;
+            }
+
+            say_num(hour, SSM_PRONOUNCED);
+            
+            if (tm.tm_min > 9) {
+                say_num(tm.tm_min, SSM_PRONOUNCED);
+            } else if (tm.tm_min) {
+                say_file("time/oh");
+                say_num(tm.tm_min, SSM_PRONOUNCED);
+            } else {
+                say_file("time/oclock");
+            }
+
+            say_file("time/%s", pm ? "p-m" : "a-m");
+
+        /*
+            was copied from 'de'
 	    if (tm.tm_hour == 1) {
                 say_args->gender = SSG_NEUTER;
                 say_num(tm.tm_hour, SSM_PRONOUNCED);
@@ -449,11 +476,11 @@ static switch_status_t ps_say_time(switch_core_session_t *session, char *tosay, 
             } else {
                 say_num(tm.tm_min, SSM_PRONOUNCED);
             }
+        */
 	}
 
 	return SWITCH_STATUS_SUCCESS;
 }
-
 
 static switch_status_t ps_say_money(switch_core_session_t *session, char *tosay, switch_say_args_t *say_args, switch_input_args_t *args)
 {
