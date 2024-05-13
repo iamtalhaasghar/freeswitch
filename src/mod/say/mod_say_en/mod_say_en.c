@@ -199,7 +199,7 @@ static switch_status_t en_say_time(switch_say_file_handle_t *sh, char *tosay, sw
 	int64_t t = 0;
 	switch_time_t target = 0, target_now = 0;
 	switch_time_exp_t tm, tm_now;
-	uint8_t say_date = 0, say_time = 0, say_year = 0, say_month = 0, say_dow = 0, say_day = 0, say_yesterday = 0, say_today = 0;
+	uint8_t say_date = 0, say_time = 0, say_year = 0, say_month = 0, say_dow = 0, say_day = 0, say_yesterday = 0, say_today = 0, no_year = 0;
 	const char *tz = NULL;
 
 	tz = switch_say_file_handle_get_variable(sh, "timezone");
@@ -319,6 +319,10 @@ static switch_status_t en_say_time(switch_say_file_handle_t *sh, char *tosay, sw
 	}
 
 	switch (say_args->type) {
+	case SST_CURRENT_DATE_TIME_NO_YEAR:
+        // say date & time but skip the year
+		say_date = say_time = no_year = 1;
+        break;
 	case SST_CURRENT_DATE_TIME:
 		say_date = say_time = 1;
 		break;
@@ -364,7 +368,8 @@ static switch_status_t en_say_time(switch_say_file_handle_t *sh, char *tosay, sw
 	}
 
 	if (say_date) {
-		say_year = say_month = say_day = say_dow = 1;
+        say_year = !no_year;
+		say_month = say_day = say_dow = 1;
 		say_today = say_yesterday = 0;
 	}
 
@@ -614,6 +619,7 @@ static switch_new_say_callback_t choose_callback(switch_say_args_t *say_args)
 	case SST_CURRENT_DATE:
 	case SST_CURRENT_TIME:
 	case SST_CURRENT_DATE_TIME:
+	case SST_CURRENT_DATE_TIME_NO_YEAR:
 	case SST_SHORT_DATE_TIME:
 		say_cb = en_say_time;
 		break;
