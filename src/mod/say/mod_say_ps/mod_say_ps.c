@@ -459,25 +459,7 @@ static switch_status_t ps_say_time(switch_core_session_t *session, char *tosay, 
 
             say_file("time/%s", pm ? "p-m" : "a-m");
 
-        /*
-            was copied from 'de'
-	    if (tm.tm_hour == 1) {
-                say_args->gender = SSG_NEUTER;
-                say_num(tm.tm_hour, SSM_PRONOUNCED);
-            } else {
-                say_num(tm.tm_hour, SSM_PRONOUNCED);
-            }
-
-            say_file("time/oclock.wav");
-
-            if (tm.tm_min < 10) {
-                say_file("digits/0.wav");
-                say_num(tm.tm_min, SSM_PRONOUNCED);
-            } else {
-                say_num(tm.tm_min, SSM_PRONOUNCED);
-            }
-        */
-	}
+       	}
 
 	return SWITCH_STATUS_SUCCESS;
 }
