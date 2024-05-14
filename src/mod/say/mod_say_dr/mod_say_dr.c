@@ -221,6 +221,25 @@ static switch_status_t dr_say_general_count(switch_core_session_t *session, char
 		}
 
 		switch (say_args->method) {
+
+        case SSM_PRONOUNCED_YEAR:
+            {
+                int num = atoi(tosay);
+                int a = num / 100;
+                int b = num % 100;
+
+                if (!b || !(a % 10)) {
+                    say_num(num, SSM_PRONOUNCED);
+                    return SWITCH_STATUS_SUCCESS;
+                }
+
+                say_num(a, SSM_PRONOUNCED);
+                say_num(b, SSM_PRONOUNCED);
+
+                return SWITCH_STATUS_SUCCESS;
+            }
+            break;
+
 		case SSM_COUNTED:
 		case SSM_PRONOUNCED:
 			if ((status = play_group(SSM_PRONOUNCED, say_args->gender, places[8], places[7], places[6], "digits/million.wav", session, args, (places[5] == 0 && places[4] == 0 && places[3] == 0 && places[2] == 0 && places[1] == 0 && places[0] == 0))) != SWITCH_STATUS_SUCCESS) {
@@ -437,25 +456,30 @@ static switch_status_t dr_say_time(switch_core_session_t *session, char *tosay, 
     }
 
 	if (say_time) {
+            int32_t hour = tm.tm_hour;
+            switch_bool_t pm = 0;
             if (say_date || say_today || say_yesterday || say_dow) {
                 say_file("time/at.wav");
             }
-
-	    if (tm.tm_hour == 1) {
-                say_args->gender = SSG_NEUTER;
-                say_num(tm.tm_hour, SSM_PRONOUNCED);
-            } else {
-                say_num(tm.tm_hour, SSM_PRONOUNCED);
+            if (hour >= 12) {
+                pm = 1;
             }
-
-            say_file("time/oclock.wav");
-
-            if (tm.tm_min < 10) {
-                say_file("digits/0.wav");
+            if (hour > 12) {
+                hour -= 12;
+            } else if (hour == 0) {
+                hour = 12;
+            }
+            say_num(hour, SSM_PRONOUNCED);            
+            if (tm.tm_min > 9) {
+                say_num(tm.tm_min, SSM_PRONOUNCED);
+            } else if (tm.tm_min) {
+                say_file("time/oh");
                 say_num(tm.tm_min, SSM_PRONOUNCED);
             } else {
-                say_num(tm.tm_min, SSM_PRONOUNCED);
+                say_file("time/oclock");
             }
+            say_file("time/%s", pm ? "p-m" : "a-m");
+
 	}
 
 	return SWITCH_STATUS_SUCCESS;
