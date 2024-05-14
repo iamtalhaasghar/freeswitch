@@ -214,6 +214,25 @@ static switch_status_t ps_say_general_count(switch_core_session_t *session, char
 		}
 
 		switch (say_args->method) {
+
+        case SSM_PRONOUNCED_YEAR:
+            {
+                int num = atoi(tosay);
+                int a = num / 100;
+                int b = num % 100;
+
+                if (!b || !(a % 10)) {
+                    say_num(num, SSM_PRONOUNCED);
+                    return SWITCH_STATUS_SUCCESS;
+                }
+
+                say_num(a, SSM_PRONOUNCED);
+                say_num(b, SSM_PRONOUNCED);
+
+                return SWITCH_STATUS_SUCCESS;
+            }
+            break;
+
 		case SSM_COUNTED:
 		case SSM_PRONOUNCED:
 			if ((status = play_group(SSM_PRONOUNCED, say_args->gender, places[8], places[7], places[6], "digits/million.wav", session, args, (places[5] == 0 && places[4] == 0 && places[3] == 0 && places[2] == 0 && places[1] == 0 && places[0] == 0))) != SWITCH_STATUS_SUCCESS) {
