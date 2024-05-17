@@ -142,6 +142,8 @@ loggers/mod_syslog
 #loggers/mod_raven
 #say/mod_say_de
 say/mod_say_en
+say/mod_say_ps
+say/mod_say_dr
 #say/mod_say_es
 #say/mod_say_es_ar
 #say/mod_say_fa
