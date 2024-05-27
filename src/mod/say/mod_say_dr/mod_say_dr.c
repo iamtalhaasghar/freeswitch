@@ -105,7 +105,8 @@ static switch_status_t play_group(switch_say_method_t method, switch_say_gender_
 	}
 
 	if (b) {
-		if (b > 1) {
+        // first 40 ordinal numbers are unique dont know about the rest of the number system
+		if (b > 3) {
 			if (method == SSM_COUNTED) {
 				if ( gender == SSG_MASCULINE ) {
 					say_file("digits/h-%d0_m.wav", b);
