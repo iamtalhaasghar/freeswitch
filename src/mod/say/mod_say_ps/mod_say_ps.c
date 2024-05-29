@@ -101,8 +101,7 @@ static switch_status_t play_group(switch_say_method_t method, switch_say_gender_
 	}
 
 	if (b) {
-        // first 40 ordinal numbers are unique dont know about the rest of the number system
-		if (b > 3) {
+		if (b > 1) {
 			/*german nominativ for "one" in numbers like 21, 171, 4591 is flexed, 2-9 are not*/
 			if (c > 0) {
 				if ( c == 1 ) {
@@ -113,13 +112,15 @@ static switch_status_t play_group(switch_say_method_t method, switch_say_gender_
 				//say_file("currency/and.wav");
 			}
 			if (method == SSM_COUNTED) {
+                // first 40 ordinal numbers are unique dont know about the rest of the number system
 				if ( gender == SSG_MASCULINE ) {
-					say_file("digits/h-%d0_m.wav", b);
+					say_file("digits/h-%d%d_m.wav", b, c);
 				} else if  ( gender == SSG_NEUTER ) {
-					say_file("digits/h-%d0_n.wav", b);
+					say_file("digits/h-%d%d_n.wav", b, c);
 				} else {
-					say_file("digits/h-%d0.wav", b);
+					say_file("digits/h-%d%d.wav", b, c);
 				}
+                c = 0;
 			} else {
 				if (b == 2 && c!= 0){
 					say_file("digits/wesht.wav", b);
