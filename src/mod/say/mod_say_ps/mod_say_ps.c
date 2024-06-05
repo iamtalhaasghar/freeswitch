@@ -472,13 +472,13 @@ static switch_status_t ps_say_time(switch_core_session_t *session, char *tosay, 
             if (tm.tm_min > 9) {
                 say_num(tm.tm_min, SSM_PRONOUNCED);
             } else if (tm.tm_min) {
-                say_file("time/oh");
+                say_file("time/oh.wav");
                 say_num(tm.tm_min, SSM_PRONOUNCED);
             } else {
-                say_file("time/oclock");
+                say_file("time/oclock.wav");
             }
 
-            say_file("time/%s", pm ? "p-m" : "a-m");
+            say_file("time/%s.wav", pm ? "p-m" : "a-m");
 
        	}
 
